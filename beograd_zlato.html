@@ -219,6 +219,26 @@ tr:hover td { background: #f8f9fa; }
   <p><b>Washington Heights</b> = centar jugoslovenske dijaspore u NYC. Stan tamo 1984 = $50–65k za 140m². Danas isti stan vredì <b>$1,000,000+</b>. 🏆</p>
 </div>
 
+<!-- SEKCIJA: CENA ZLATA KROZ VREME -->
+<div class="card">
+  <div class="card-title">Cena zlata (USD/oz) — 1970–2026</div>
+  <div class="card-sub">Godišnji proseci LBMA London Fix · * = procena</div>
+  <canvas id="goldHistChart" style="max-height:300px"></canvas>
+</div>
+
+<div class="story" style="background:#f0f9ff; border-color:#bae6fd;">
+  <h3 style="color:#075985;">Zašto je zlato gubilo vrednost od 1980. do 2007. — i šta je to značilo za one koji su ga čuvali</h3>
+  <p>
+    Vrhunac od 1980. godine ($615 godišnji prosek, intraday vrh $850) nije bio rezultat fundamentalne vrednosti — bio je panika. Iranska revolucija, naftni šok, sovjetska invazija na Avganistan i američka inflacija od 14% naterali su investitore da pobegnu u zlato. Kada je Fed predsednika Paula Volckera podigao kamate na 20%, inflacija je bila ubijena za nekoliko godina, a sa njom i glavni razlog da se drži zlato.
+  </p>
+  <p style="margin-top: 8px;">
+    Narednih <b>20 godina</b> zlato je spavalo dok je svet bio zauzet nečim profitabilnijim. Berza SAD rasla je 10–15% godišnje tokom 1990-ih (dotcom bum). Dolar je bio jak. Inflacije gotovo nije bilo. Centralne banke Engleske, Australije i MMF-a prodavale su zlatne rezerve — Engleska je 1999–2002. prodala <b>polovinu svojih rezervi</b> blizu dna tržišta (po ~$275/oz), što je ušlo u istoriju kao "Braunovo dno". Ko je od 1980. do 2001. čuvao zlato, izgubio je više od 50% nominalne vrednosti — a realno, uzimajući u obzir inflaciju, izgubio je oko 85% kupovne moći.
+  </p>
+  <p style="margin-top: 8px;">
+    Oporavak od 2001. doneli su: pad dolara, rat u Iraku, negativne realne kamate i — ključno — kupovina zlata od strane kineske i indijske srednje klase. Finansijska kriza 2008. i kvantitativno popuštanje (štampanje novca) gurnuli su zlato u novi dugi bull market koji traje i danas. Ko je kupovao zlato 2001. po $270 i drži ga do 2026. pri $4.777 — zaradio je <b>17× u dolarima</b>.
+  </p>
+</div>
+
 <!-- TABELA -->
 <div class="card">
   <div class="card-title">Kompletna tabela — svi podaci</div>
@@ -521,6 +541,76 @@ new Chart(document.getElementById('g100Chart'), {
     plugins: {
       legend: { display: false },
       tooltip: { callbacks: { label: i => `${i.parsed.y} m² / 100g zlata` } }
+    }
+  }
+});
+
+// ─── GRAFIKON CENE ZLATA KROZ VREME ──────────────────────────
+const goldUsdOzArr = DATA.map(d => d.gusd);
+function goldPointColor(year) {
+  if (year >= 1980 && year <= 2001) return 'rgba(220,38,38,0.75)';
+  if (year >= 2002 && year <= 2011) return 'rgba(22,163,74,0.75)';
+  return 'rgba(180,83,9,0.75)';
+}
+const goldAnnotationColors = DATA.map(d => goldPointColor(d.god));
+
+new Chart(document.getElementById('goldHistChart'), {
+  type: 'line',
+  data: {
+    labels: years,
+    datasets: [{
+      label: 'Zlato USD/oz',
+      data: goldUsdOzArr,
+      borderColor: '#b45309',
+      backgroundColor: ctx => {
+        const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, ctx.chart.height);
+        gradient.addColorStop(0, 'rgba(180,83,9,0.25)');
+        gradient.addColorStop(1, 'rgba(180,83,9,0.01)');
+        return gradient;
+      },
+      borderWidth: 2.5,
+      fill: true,
+      tension: 0.35,
+      pointRadius: 2,
+      pointBackgroundColor: goldAnnotationColors,
+      pointBorderColor: goldAnnotationColors,
+    }]
+  },
+  options: {
+    responsive: true,
+    animation: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: item => `Zlato: $${item.parsed.y.toLocaleString()}/oz`,
+          afterLabel: item => {
+            const yr = item.label;
+            if (yr >= 1980 && yr <= 2001) return '↓ Period slabog zlata';
+            if (yr >= 2002 && yr <= 2011) return '↑ Novi bull market';
+            return '';
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: { ...TICK, maxTicksLimit: 14 },
+        grid: { color: GRID_CLR },
+        title: { display: true, text: 'Godina', color: '#6c757d', font: { size: 11 } }
+      },
+      y: {
+        ticks: {
+          ...TICK,
+          callback: val => `$${val.toLocaleString()}`
+        },
+        grid: { color: GRID_CLR },
+        title: {
+          display: true, text: 'USD / oz',
+          color: '#b45309', font: { size: 11, weight: 'bold' }
+        }
+      }
     }
   }
 });
