@@ -153,9 +153,10 @@ tr:hover td { background: #f8f9fa; }
   font-size: clamp(0.72rem, 2.3vw, 0.82rem);
   line-height: 1.7;
 }
-.story h3 { font-size: 0.95rem; color: #92400e; margin-bottom: 8px; }
-.story table { min-width: 0; }
-.story td, .story th { font-size: 0.78rem; padding: 4px 8px; }
+.story h3 { font-size: clamp(0.8rem, 3vw, 0.95rem); color: #92400e; margin-bottom: 8px; line-height: 1.4; }
+.story-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 10px; }
+.story table { min-width: 420px; border-collapse: collapse; }
+.story td, .story th { font-size: clamp(0.65rem, 1.8vw, 0.76rem); padding: 4px 8px; white-space: nowrap; }
 </style>
 </head>
 <body>
@@ -208,13 +209,15 @@ tr:hover td { background: #f8f9fa; }
   <h3>📍 Priča: Kneza Miloša 120m² → Manhattan 140m² + $20,000 (1984)</h3>
   <p><b>Kneza Miloša</b> = jedna od najprestižnijih ulica u Beogradu (ambasade, predratna zdanja). Premium 3–4× iznad proseka je realna procena.</p>
   <br>
-  <table style="width:100%; border-collapse:collapse">
-    <tr style="background:#fef9c3"><th style="text-align:left">Scenario</th><th>Vrednost 120m² BG</th><th>Ostatak posle kupovine</th><th>Moguće?</th></tr>
-    <tr><td>Prosek BG (1× = €380/m²)</td><td>~$31,300</td><td>—</td><td>❌</td></tr>
-    <tr><td>Premium 3× (Vračar, centar)</td><td>~$93,900</td><td>+$18,900 (Upper Manh.)</td><td>⚠️ Na ivici</td></tr>
+  <div class="story-scroll">
+  <table style="width:100%">
+    <tr style="background:#fef9c3"><th style="text-align:left">Scenario</th><th>Stan 120m²</th><th>Ostatak</th><th>Moguće?</th></tr>
+    <tr><td>Prosek BG (€380/m²)</td><td>~$31,300</td><td>—</td><td>❌</td></tr>
+    <tr><td>Premium 3× (Vračar)</td><td>~$93,900</td><td>+$18,900 (Upper Manh.)</td><td>⚠️ Na ivici</td></tr>
     <tr style="background:#fef9c3"><td><b>Kneza Miloša 4×</b></td><td><b>~$125,200</b></td><td><b>+$70,000 (Harlem/WH)</b></td><td>✅ <b>Verodostojno</b></td></tr>
-    <tr><td>KM 4× + 1986-88 (slab $)</td><td>~$198,000</td><td>+$68,000 (Upper West)</td><td>✅ Lako</td></tr>
+    <tr><td>KM 4× + 1986–88</td><td>~$198,000</td><td>+$68,000 (Upper West)</td><td>✅ Lako</td></tr>
   </table>
+  </div>
   <br>
   <p><b>Washington Heights</b> = centar jugoslovenske dijaspore u NYC. Stan tamo 1984 = $50–65k za 140m². Danas isti stan vredì <b>$1,000,000+</b>. 🏆</p>
 </div>
