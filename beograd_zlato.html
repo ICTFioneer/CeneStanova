@@ -227,14 +227,14 @@ tr:hover td { background: #f8f9fa; }
       <thead>
         <tr>
           <th>God.</th>
-          <th>Zlato USD/oz</th>
-          <th>Zlato EUR/g</th>
-          <th>Zlato USD/g</th>
           <th>BG EUR/m²</th>
-          <th>BG USD/m²</th>
           <th>g/m²</th>
           <th>m²/oz</th>
           <th>m²/100g</th>
+          <th>BG USD/m²</th>
+          <th>Zlato EUR/g</th>
+          <th>Zlato USD/g</th>
+          <th>Zlato USD/oz</th>
         </tr>
       </thead>
       <tbody id="tableBody"></tbody>
@@ -579,14 +579,14 @@ DATA.forEach(d => {
   tb.innerHTML += `
     <tr>
       <td>${d.god}${ns}</td>
-      <td>$${d.gusd.toLocaleString()}</td>
-      <td>€${d.goldEurG.toFixed(2)}</td>
-      <td>$${d.goldUsdG.toFixed(2)}</td>
       <td>€${d.bgEur.toLocaleString()}</td>
-      <td>$${Math.round(d.bgUsd).toLocaleString()}</td>
       <td class="${gc}">${d.gpm.toFixed(1)}</td>
       <td>${d.sqmOz.toFixed(2)}</td>
       <td>${d.sqm100.toFixed(2)}</td>
+      <td>$${Math.round(d.bgUsd).toLocaleString()}</td>
+      <td>€${d.goldEurG.toFixed(2)}</td>
+      <td>$${d.goldUsdG.toFixed(2)}</td>
+      <td>$${d.gusd.toLocaleString()}</td>
     </tr>`;
 });
 </script>
