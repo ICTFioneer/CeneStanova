@@ -132,6 +132,7 @@ tr:hover td { background: #f8f9fa; }
 .pricey { color: var(--red);   font-weight: 700; }
 .warn   { color: #ea580c; }
 .est    { color: #adb5bd; font-size: 0.75em; }
+.rgz    { color: #16a34a; font-size: 0.72em; font-weight: 600; }
 
 /* NOTE */
 .note {
@@ -162,7 +163,7 @@ tr:hover td { background: #f8f9fa; }
 <h1>Beograd: Nekretnine vs. Zlato — 1970–2026</h1>
 <div class="subtitle">
   Cene stanova izražene u zlatu i valutama · Pre-1999 = DEM-ekvivalent (1 EUR = 1.95583 DEM)<br>
-  Zlato: godišnji proseci LBMA London Fix · * = procena · ~ = DEM-ekv procene
+  Zlato: godišnji proseci LBMA London Fix · RGZ = zvanični Registar cena nepokretnosti · * = procena · ~ = procena
 </div>
 
 <div class="eras" id="eraLabels"></div>
@@ -244,7 +245,7 @@ tr:hover td { background: #f8f9fa; }
 <div class="note">
   <b>Napomene o podacima:</b><br>
   Zlato: godišnji proseci LBMA (London Bullion Market) — pouzdani podaci. · Pre-2000 Belgrade cene: DEM-ekvivalent procene (tržište socijalistička Jugoslavija + hiperinflacija 1992–94 = ograničeno tržište).<br>
-  NBS objavljuje indeks cena nekretnina od 2008 — cene za 2008–2026 su pouzdanije. · * = procena 2025–2026. · USD konverzija: pre-1999 kroz DEM kurs, 1999+ direktno EUR/USD.
+  <b>RGZ</b> = Republički geodetski zavod, Registar cena nepokretnosti — zvanične transakcijske cene (2019–2025), hedonic regression, baza Q1 2019=100. · ~ = procena. · * = procena 2026. · USD konverzija: pre-1999 kroz DEM kurs, 1999+ direktno EUR/USD.
 </div>
 
 <script>
@@ -301,33 +302,33 @@ const RAW = [
   // Zlato: 2000 na dnu, zatim stalni rast do 2012
   // BG nekretnine: eksplozija 2003-2008, korekcija 2009, stagnacija 2010-2012
   [2000,  279, 0.924,"EUR",300, "~"],
-  [2001,  271, 0.896,"EUR",350, ""],
-  [2002,  310, 0.945,"EUR",450, ""],
-  [2003,  363, 1.131,"EUR",550, ""],
-  [2004,  410, 1.243,"EUR",700, ""],
-  [2005,  444, 1.244,"EUR",900, ""],   // Prosek (end-of-year bio $513)
-  [2006,  603, 1.256,"EUR",1050,""],
-  [2007,  695, 1.370,"EUR",1350,""],
-  [2008,  872, 1.471,"EUR",1600,""],   // RE vrh + finansijska kriza
-  [2009,  972, 1.395,"EUR",1350,""],
-  [2010, 1224, 1.326,"EUR",1300,""],   // Prosek (end-of-year bio $1,410)
-  [2011, 1571, 1.392,"EUR",1300,""],   // Zlato peak $1,900 sep-11
-  [2012, 1669, 1.286,"EUR",1250,""],   // Zlato vrhunac godiš. proseka
+  [2001,  271, 0.896,"EUR", 350, "~"],
+  [2002,  310, 0.945,"EUR", 450, "~"],
+  [2003,  363, 1.131,"EUR", 550, "~"],
+  [2004,  410, 1.243,"EUR", 700, "~"],
+  [2005,  444, 1.244,"EUR", 900, "~"],   // Prosek (end-of-year bio $513)
+  [2006,  603, 1.256,"EUR",1050, "~"],
+  [2007,  695, 1.370,"EUR",1350, "~"],
+  [2008,  872, 1.471,"EUR",1600, "~"],   // RE vrh + finansijska kriza
+  [2009,  972, 1.395,"EUR",1350, "~"],
+  [2010, 1224, 1.326,"EUR",1300, "~"],   // Prosek (end-of-year bio $1,410)
+  [2011, 1571, 1.392,"EUR",1300, "~"],   // Zlato peak $1,900 sep-11
+  [2012, 1669, 1.286,"EUR",1250, "~"],   // Zlato vrhunac godiš. proseka
   // Era V — Novi rast oba sredstva (2013-2026)
-  [2013, 1411, 1.329,"EUR",1230,""],
-  [2014, 1266, 1.329,"EUR",1250,""],
-  [2015, 1160, 1.110,"EUR",1260,""],
-  [2016, 1251, 1.107,"EUR",1320,""],
-  [2017, 1257, 1.130,"EUR",1450,""],
-  [2018, 1269, 1.181,"EUR",1600,""],
-  [2019, 1393, 1.119,"EUR",1750,""],
-  [2020, 1769, 1.141,"EUR",1900,""],   // COVID + zlato bum
-  [2021, 1799, 1.183,"EUR",2200,""],
-  [2022, 1802, 1.053,"EUR",2600,""],
-  [2023, 1941, 1.081,"EUR",3000,""],
-  [2024, 2370, 1.085,"EUR",3500,""],
-  [2025, 3000, 1.050,"EUR",3900,"*"],  // Zlato prešlo $4000 u okt-25
-  [2026, 3300, 1.100,"EUR",4200,"*"],  // Procena apr-2026
+  [2013, 1411, 1.329,"EUR",1200, "~"],
+  [2014, 1266, 1.329,"EUR",1200, "~"],
+  [2015, 1160, 1.110,"EUR",1230, "~"],
+  [2016, 1251, 1.107,"EUR",1260, "~"],
+  [2017, 1257, 1.130,"EUR",1300, "~"],
+  [2018, 1269, 1.181,"EUR",1340, "~"],
+  [2019, 1393, 1.119,"EUR",1376,"RGZ"], // RGZ Registar cena nepokretnosti
+  [2020, 1769, 1.141,"EUR",1484,"RGZ"], // COVID + zlato bum
+  [2021, 1799, 1.183,"EUR",1711,"RGZ"],
+  [2022, 1802, 1.053,"EUR",2091,"RGZ"],
+  [2023, 1941, 1.081,"EUR",2117,"RGZ"],
+  [2024, 2370, 1.085,"EUR",2271,"RGZ"],
+  [2025, 3300, 1.060,"EUR",2593,"RGZ"], // Godišnji prosek; zlato prešlo $4000 u okt-25
+  [2026, 4777, 1.174,"EUR",2650,"*"],   // Spot cena apr-2026; EUR/USD 1.1744
 ];
 
 // ─── RAČUNANJE ────────────────────────────────────────────────
@@ -527,16 +528,16 @@ new Chart(document.getElementById('g100Chart'), {
 // ─── STAT PILLS ───────────────────────────────────────────────
 const last = DATA[DATA.length - 1];
 const peak08 = DATA.find(d => d.god === 2008);
-const min12  = DATA.find(d => d.god === 2012);
-const min80  = DATA.find(d => d.god === 1984);
+const minModern = DATA.filter(d => d.god >= 2000 && d.god < 2026)
+  .reduce((a, b) => a.gpm < b.gpm ? a : b);
 
 const statsEl = document.getElementById('statsRow');
 [
   { val: `€${last.bgEur.toLocaleString()}`, lbl: 'BG m² (2026*)', color: '#1c64c8' },
   { val: `$${Math.round(last.bgUsd).toLocaleString()}`, lbl: 'BG m² USD (2026*)', color: '#0e7490' },
-  { val: `${last.gpm.toFixed(0)}g`, lbl: 'g zlata / m² (2026)', color: '#d97706' },
+  { val: `${last.gpm.toFixed(0)}g`, lbl: 'g zlata / m² (2026) ↓ REKORD', color: '#16a34a' },
   { val: `${peak08.gpm.toFixed(0)}g`, lbl: 'Vrhunac g/m² (2008)', color: '#dc2626' },
-  { val: `${min12.gpm.toFixed(0)}g`, lbl: 'Minimum g/m² (2012)', color: '#16a34a' },
+  { val: `${minModern.gpm.toFixed(0)}g`, lbl: `Prethodni min g/m² (${minModern.god})`, color: '#d97706' },
   { val: `$${Math.round(last.goldUsdG * 31.1).toLocaleString()}`, lbl: 'Zlato USD/oz (2026*)', color: '#b45309' },
 ].forEach(s => {
   statsEl.innerHTML += `
@@ -573,7 +574,8 @@ DATA.forEach(d => {
     tb.innerHTML += `<tr class="era-row"><td colspan="9">▸ ${ERA_HEADERS[d.god]}</td></tr>`;
   }
   const gc = d.gpm < 25 ? 'cheap' : d.gpm > 75 ? 'pricey' : d.note.includes('!') ? 'warn' : '';
-  const ns = d.note ? `<span class="est">${d.note}</span>` : '';
+  const noteClass = d.note === 'RGZ' ? 'rgz' : 'est';
+  const ns = d.note ? `<span class="${noteClass}">${d.note}</span>` : '';
   tb.innerHTML += `
     <tr>
       <td>${d.god}${ns}</td>
