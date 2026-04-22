@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Beograd: Nekretnine vs Zlato 1970–2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f8f9fa;
+  --bg2: #ffffff;
+  --border: #dee2e6;
+  --text: #212529;
+  --muted: #6c757d;
+  --blue: #1c64c8;
+  --orange: #d97706;
+  --green: #16a34a;
+  --red: #dc2626;
+  --gold: #b45309;
+  --shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+html { font-size: 16px; }
+body {
+  font-family: 'Segoe UI', -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  padding: 12px;
+}
+h1 {
+  text-align: center;
+  font-size: clamp(1rem, 4vw, 1.5rem);
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.subtitle {
+  text-align: center;
+  font-size: clamp(0.7rem, 2.5vw, 0.82rem);
+  color: var(--muted);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+/* ERA PILLS */
+.eras {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: 6px; margin-bottom: 16px;
+}
+.era-pill {
+  font-size: clamp(0.62rem, 2vw, 0.72rem);
+  padding: 3px 10px; border-radius: 20px;
+  background: #e9ecef; color: var(--muted);
+  border: 1px solid var(--border);
+}
+
+/* CARDS */
+.card {
+  background: var(--bg2);
+  border-radius: 12px;
+  padding: clamp(12px, 3vw, 20px);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  margin-bottom: 16px;
+}
+.card-title {
+  font-size: clamp(0.78rem, 2.5vw, 0.9rem);
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 12px;
+  text-align: center;
+}
+.card-sub {
+  font-size: clamp(0.65rem, 2vw, 0.75rem);
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* CHART GRIDS */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+@media (max-width: 640px) {
+  .grid-2 { grid-template-columns: 1fr; }
+}
+
+/* STAT PILLS row */
+.stats {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: 8px; margin-bottom: 16px;
+}
+.stat {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 14px;
+  text-align: center;
+  min-width: 110px;
+  flex: 1 1 110px;
+  max-width: 160px;
+}
+.stat-val { font-size: 1.2rem; font-weight: 700; }
+.stat-lbl { font-size: 0.68rem; color: var(--muted); margin-top: 2px; }
+
+/* TABLE */
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table { width: 100%; border-collapse: collapse; font-size: clamp(0.65rem, 1.8vw, 0.8rem); min-width: 640px; }
+th {
+  background: #f1f3f5;
+  color: var(--text);
+  padding: 8px 10px;
+  text-align: right;
+  border-bottom: 2px solid var(--border);
+  font-weight: 600;
+  white-space: nowrap;
+  position: sticky; top: 0;
+}
+th:first-child { text-align: left; }
+td { padding: 5px 10px; text-align: right; border-bottom: 1px solid #f1f3f5; white-space: nowrap; }
+td:first-child { text-align: left; font-weight: 500; }
+tr:hover td { background: #f8f9fa; }
+.era-row td {
+  background: #f1f3f5; color: var(--muted);
+  font-size: 0.72rem; padding: 4px 10px;
+  font-style: italic;
+}
+.cheap  { color: var(--green); font-weight: 700; }
+.pricey { color: var(--red);   font-weight: 700; }
+.warn   { color: #ea580c; }
+.est    { color: #adb5bd; font-size: 0.75em; }
+
+/* NOTE */
+.note {
+  text-align: center;
+  font-size: clamp(0.65rem, 2vw, 0.75rem);
+  color: var(--muted);
+  margin-top: 14px;
+  line-height: 1.7;
+}
+
+/* STORY BOX */
+.story {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  font-size: clamp(0.72rem, 2.3vw, 0.82rem);
+  line-height: 1.7;
+}
+.story h3 { font-size: 0.95rem; color: #92400e; margin-bottom: 8px; }
+.story table { min-width: 0; }
+.story td, .story th { font-size: 0.78rem; padding: 4px 8px; }
+</style>
+</head>
+<body>
+
+<h1>Beograd: Nekretnine vs. Zlato — 1970–2026</h1>
+<div class="subtitle">
+  Cene stanova izražene u zlatu i valutama · Pre-1999 = DEM-ekvivalent (1 EUR = 1.95583 DEM)<br>
+  Zlato: godišnji proseci LBMA London Fix · * = procena · ~ = DEM-ekv procene
+</div>
+
+<div class="eras" id="eraLabels"></div>
+<div class="stats" id="statsRow"></div>
+
+<!-- GLAVNI GRAFIKONI: dvoosni EUR i USD -->
+<div class="card">
+  <div class="card-title">Cena nekretnine (EUR/m²) vs. Grami zlata po m² — Beograd 1970–2026</div>
+  <div class="card-sub">Plava linija = cena m² u EUR · Narandžasta isprekidana = grami zlata potrebni za 1 m²</div>
+  <canvas id="mainEur" style="max-height:320px"></canvas>
+</div>
+
+<div class="card">
+  <div class="card-title">Cena nekretnine (USD/m²) vs. Grami zlata po m² — Beograd 1970–2026</div>
+  <div class="card-sub">Plava linija = cena m² u USD · Narandžasta isprekidana = grami zlata potrebni za 1 m²</div>
+  <canvas id="mainUsd" style="max-height:320px"></canvas>
+</div>
+
+<!-- MANJI GRAFIKONI -->
+<div class="grid-2">
+  <div class="card">
+    <div class="card-title">Cena zlata (EUR/g)</div>
+    <canvas id="goldEurChart" style="max-height:220px"></canvas>
+  </div>
+  <div class="card">
+    <div class="card-title">Cena zlata (USD/g)</div>
+    <canvas id="goldUsdChart" style="max-height:220px"></canvas>
+  </div>
+  <div class="card">
+    <div class="card-title">m² koje kupuješ sa 1 oz zlata</div>
+    <div class="card-sub">↑ = nekretnina jeftinija u zlatu</div>
+    <canvas id="ozChart" style="max-height:220px"></canvas>
+  </div>
+  <div class="card">
+    <div class="card-title">m² koje kupuješ sa 100g zlata</div>
+    <canvas id="g100Chart" style="max-height:220px"></canvas>
+  </div>
+</div>
+
+<!-- PRIČA KNEZA MILOŠA -->
+<div class="story">
+  <h3>📍 Priča: Kneza Miloša 120m² → Manhattan 140m² + $20,000 (1984)</h3>
+  <p><b>Kneza Miloša</b> = jedna od najprestižnijih ulica u Beogradu (ambasade, predratna zdanja). Premium 3–4× iznad proseka je realna procena.</p>
+  <br>
+  <table style="width:100%; border-collapse:collapse">
+    <tr style="background:#fef9c3"><th style="text-align:left">Scenario</th><th>Vrednost 120m² BG</th><th>Ostatak posle kupovine</th><th>Moguće?</th></tr>
+    <tr><td>Prosek BG (1× = €380/m²)</td><td>~$31,300</td><td>—</td><td>❌</td></tr>
+    <tr><td>Premium 3× (Vračar, centar)</td><td>~$93,900</td><td>+$18,900 (Upper Manh.)</td><td>⚠️ Na ivici</td></tr>
+    <tr style="background:#fef9c3"><td><b>Kneza Miloša 4×</b></td><td><b>~$125,200</b></td><td><b>+$70,000 (Harlem/WH)</b></td><td>✅ <b>Verodostojno</b></td></tr>
+    <tr><td>KM 4× + 1986-88 (slab $)</td><td>~$198,000</td><td>+$68,000 (Upper West)</td><td>✅ Lako</td></tr>
+  </table>
+  <br>
+  <p><b>Washington Heights</b> = centar jugoslovenske dijaspore u NYC. Stan tamo 1984 = $50–65k za 140m². Danas isti stan vredì <b>$1,000,000+</b>. 🏆</p>
+</div>
+
+<!-- TABELA -->
+<div class="card">
+  <div class="card-title">Kompletna tabela — svi podaci</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>God.</th>
+          <th>Zlato USD/oz</th>
+          <th>Zlato EUR/g</th>
+          <th>Zlato USD/g</th>
+          <th>BG EUR/m²</th>
+          <th>BG USD/m²</th>
+          <th>g/m²</th>
+          <th>m²/oz</th>
+          <th>m²/100g</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="note">
+  <b>Napomene o podacima:</b><br>
+  Zlato: godišnji proseci LBMA (London Bullion Market) — pouzdani podaci. · Pre-2000 Belgrade cene: DEM-ekvivalent procene (tržište socijalistička Jugoslavija + hiperinflacija 1992–94 = ograničeno tržište).<br>
+  NBS objavljuje indeks cena nekretnina od 2008 — cene za 2008–2026 su pouzdanije. · * = procena 2025–2026. · USD konverzija: pre-1999 kroz DEM kurs, 1999+ direktno EUR/USD.
+</div>
+
+<script>
+// ─── KONSTANTЕ ───────────────────────────────────────────────
+const DEM_EUR = 1.95583;
+const OZ_G   = 31.1035;
+
+// ─── SIROVI PODACI ────────────────────────────────────────────
+// [godina, gold_usd_oz, kurs, tip_kursa, bg_eur_ekv, napomena]
+// tip: "DEM" = DEM/USD godišnji prosek | "EUR" = EUR/USD godišnji prosek
+const RAW = [
+  // Era I — Bretton Woods / slobodno tržište (1970-1979)
+  // Zlato: $35 fiksno do aug 1971, zatim slobodna plovidba
+  // USD/DEM: dolar počeo slabiti, DEM jačao
+  [1970,   36, 3.65,"DEM", 160, "~"],
+  [1971,   41, 3.49,"DEM", 180, "~"],
+  [1972,   58, 3.19,"DEM", 200, "~"],
+  [1973,   97, 2.67,"DEM", 230, "~"],
+  [1974,  154, 2.59,"DEM", 270, "~"],
+  [1975,  161, 2.46,"DEM", 300, "~"],
+  [1976,  125, 2.52,"DEM", 320, "~"],
+  [1977,  148, 2.32,"DEM", 350, "~"],
+  [1978,  193, 2.01,"DEM", 380, "~"],
+  [1979,  307, 1.83,"DEM", 420, "~"],
+  // Era II — Reaganomika (1980-1990)
+  // 1980: zlato vrhunac ($615 prosek, $850 peak)
+  // 1984-85: dollar na vrhuncu (Plaza Accord sep 1985)
+  // 1986-90: dolar slabi, DEM jača
+  [1980,  615, 1.82,"DEM", 450, "~"],
+  [1981,  460, 2.26,"DEM", 430, "~"],
+  [1982,  376, 2.43,"DEM", 400, "~"],
+  [1983,  424, 2.55,"DEM", 400, "~"],
+  [1984,  361, 2.85,"DEM", 380, "~"],  // ← Kneza Miloša priča
+  [1985,  317, 2.94,"DEM", 370, "~"],  // Plaza Accord sep-85
+  [1986,  368, 2.17,"DEM", 380, "~"],
+  [1987,  447, 1.80,"DEM", 420, "~"],
+  [1988,  437, 1.76,"DEM", 450, "~"],
+  [1989,  381, 1.88,"DEM", 480, "~"],
+  [1990,  383, 1.62,"DEM", 480, "~"],
+  // Era III — Hiperinflacija i sankcije (1991-1999)
+  // 1992-1994: najveća hiperinflacija u istoriji (dinar)
+  // DEM jedini pravi novac, tržište gotovo zamrlo
+  [1991,  362, 1.66,"DEM", 350, "~"],
+  [1992,  344, 1.56,"DEM", 250, "~!"],
+  [1993,  360, 1.65,"DEM", 200, "~!!"],
+  [1994,  384, 1.62,"DEM", 230, "~!"],
+  [1995,  384, 1.43,"DEM", 300, "~"],
+  [1996,  388, 1.50,"DEM", 330, "~"],
+  [1997,  331, 1.73,"DEM", 360, "~"],
+  [1998,  294, 1.76,"DEM", 380, "~"],
+  [1999,  279, 1.067,"EUR",350, "~"],
+  // Era IV — Tranzicija i nekretninski bum (2000-2012)
+  // EUR uveden jan 1999; EUR/USD: 2000=0.924 (EUR najslabiji), 2008=1.471 (EUR najjači)
+  // Zlato: 2000 na dnu, zatim stalni rast do 2012
+  // BG nekretnine: eksplozija 2003-2008, korekcija 2009, stagnacija 2010-2012
+  [2000,  279, 0.924,"EUR",300, "~"],
+  [2001,  271, 0.896,"EUR",350, ""],
+  [2002,  310, 0.945,"EUR",450, ""],
+  [2003,  363, 1.131,"EUR",550, ""],
+  [2004,  410, 1.243,"EUR",700, ""],
+  [2005,  444, 1.244,"EUR",900, ""],   // Prosek (end-of-year bio $513)
+  [2006,  603, 1.256,"EUR",1050,""],
+  [2007,  695, 1.370,"EUR",1350,""],
+  [2008,  872, 1.471,"EUR",1600,""],   // RE vrh + finansijska kriza
+  [2009,  972, 1.395,"EUR",1350,""],
+  [2010, 1224, 1.326,"EUR",1300,""],   // Prosek (end-of-year bio $1,410)
+  [2011, 1571, 1.392,"EUR",1300,""],   // Zlato peak $1,900 sep-11
+  [2012, 1669, 1.286,"EUR",1250,""],   // Zlato vrhunac godiš. proseka
+  // Era V — Novi rast oba sredstva (2013-2026)
+  [2013, 1411, 1.329,"EUR",1230,""],
+  [2014, 1266, 1.329,"EUR",1250,""],
+  [2015, 1160, 1.110,"EUR",1260,""],
+  [2016, 1251, 1.107,"EUR",1320,""],
+  [2017, 1257, 1.130,"EUR",1450,""],
+  [2018, 1269, 1.181,"EUR",1600,""],
+  [2019, 1393, 1.119,"EUR",1750,""],
+  [2020, 1769, 1.141,"EUR",1900,""],   // COVID + zlato bum
+  [2021, 1799, 1.183,"EUR",2200,""],
+  [2022, 1802, 1.053,"EUR",2600,""],
+  [2023, 1941, 1.081,"EUR",3000,""],
+  [2024, 2370, 1.085,"EUR",3500,""],
+  [2025, 3000, 1.050,"EUR",3900,"*"],  // Zlato prešlo $4000 u okt-25
+  [2026, 3300, 1.100,"EUR",4200,"*"],  // Procena apr-2026
+];
+
+// ─── RAČUNANJE ────────────────────────────────────────────────
+const DATA = RAW.map(([god, gusd, rate, type, bgEur, note]) => {
+  // Zlato EUR/oz
+  const goldEurOz = type === "DEM"
+    ? gusd * rate / DEM_EUR          // USD*DEM/USD / DEM/EUR = EUR
+    : gusd / rate;                   // USD / (EUR/USD) = EUR
+  // Zlato EUR/g i USD/g
+  const goldEurG = goldEurOz / OZ_G;
+  const goldUsdG = gusd / OZ_G;
+  // BG USD/m² (pre-1999: kroz DEM, post-1999: direktno)
+  const bgUsd = type === "DEM"
+    ? bgEur * DEM_EUR / rate         // EUR * DEM/EUR / (DEM/USD) = USD
+    : bgEur * rate;                  // EUR * EUR/USD = USD
+  // Racio
+  const gpm    = bgEur  / goldEurG;  // g/m² (isti u svim valutama)
+  const sqmOz  = goldEurOz / bgEur;  // m² po unci
+  const sqm100 = 100 / gpm;          // m² po 100g
+  return { god, gusd, goldEurG, goldUsdG, bgEur, bgUsd, gpm, sqmOz, sqm100, note };
+});
+
+// ─── NIZOVI ZA GRAFOVE ────────────────────────────────────────
+const years    = DATA.map(d => d.god);
+const goldEurG = DATA.map(d => +d.goldEurG.toFixed(2));
+const goldUsdG = DATA.map(d => +d.goldUsdG.toFixed(2));
+const bgEurArr = DATA.map(d => d.bgEur);
+const bgUsdArr = DATA.map(d => Math.round(d.bgUsd));
+const gpmArr   = DATA.map(d => +d.gpm.toFixed(1));
+const sqmOzArr = DATA.map(d => +d.sqmOz.toFixed(2));
+const sqm100   = DATA.map(d => +d.sqm100.toFixed(2));
+
+// Boje po g/m²
+const gpmBg = gpmArr.map(v =>
+  v < 25 ? 'rgba(22,163,74,0.7)' :
+  v > 75 ? 'rgba(220,38,38,0.7)' :
+  v > 55 ? 'rgba(234,88,12,0.7)' :
+  'rgba(59,130,246,0.7)');
+
+// ─── HELPER: zajednički options ───────────────────────────────
+const GRID_CLR = '#e9ecef';
+const TICK = { color: '#6c757d', font: { size: 10 } };
+
+function baseOpts(tooltip_suffix) {
+  return {
+    responsive: true,
+    animation: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: item => `${item.dataset.label}: ${item.parsed.y} ${tooltip_suffix}`
+        }
+      }
+    },
+    scales: {
+      x: { ticks: { ...TICK, maxTicksLimit: 10 }, grid: { color: GRID_CLR } },
+      y: { ticks: TICK, grid: { color: GRID_CLR } }
+    }
+  };
+}
+
+// ─── DUAL-AXIS CHART FACTORY ──────────────────────────────────
+function dualAxisChart(canvasId, priceData, priceLabel, priceColor, gpmData) {
+  return new Chart(document.getElementById(canvasId), {
+    type: 'line',
+    data: {
+      labels: years,
+      datasets: [
+        {
+          label: priceLabel,
+          data: priceData,
+          yAxisID: 'yP',
+          borderColor: priceColor,
+          backgroundColor: 'transparent',
+          borderWidth: 2.5,
+          pointRadius: 1.5,
+          tension: 0.35,
+        },
+        {
+          label: 'Grami zlata / m²',
+          data: gpmData,
+          yAxisID: 'yG',
+          borderColor: '#d97706',
+          backgroundColor: 'transparent',
+          borderWidth: 2,
+          pointRadius: 1.5,
+          tension: 0.35,
+          borderDash: [7, 4],
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      animation: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top',
+          labels: { font: { size: 11 }, padding: 12, usePointStyle: true, pointStyleWidth: 20 }
+        },
+        tooltip: {
+          callbacks: {
+            label: item => item.datasetIndex === 0
+              ? `${item.dataset.label}: ${item.parsed.y.toLocaleString()}`
+              : `Grami zlata/m²: ${item.parsed.y}g`
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { ...TICK, maxTicksLimit: 12 },
+          grid: { color: GRID_CLR },
+          title: { display: true, text: 'Godina', color: '#6c757d', font: { size: 11 } }
+        },
+        yP: {
+          type: 'linear',
+          position: 'left',
+          ticks: { ...TICK, color: priceColor },
+          grid: { color: GRID_CLR },
+          title: {
+            display: true,
+            text: priceLabel,
+            color: priceColor,
+            font: { size: 11, weight: 'bold' }
+          }
+        },
+        yG: {
+          type: 'linear',
+          position: 'right',
+          ticks: { ...TICK, color: '#d97706' },
+          grid: { drawOnChartArea: false },
+          title: {
+            display: true,
+            text: 'Grami zlata / m²',
+            color: '#d97706',
+            font: { size: 11, weight: 'bold' }
+          }
+        }
+      }
+    }
+  });
+}
+
+// ─── KREIRAJ SVE GRAFOVE ──────────────────────────────────────
+dualAxisChart('mainEur', bgEurArr, 'Cena m² (EUR)', '#1c64c8', gpmArr);
+dualAxisChart('mainUsd', bgUsdArr, 'Cena m² (USD)', '#0e7490', gpmArr);
+
+// Manji grafikoni
+new Chart(document.getElementById('goldEurChart'), {
+  type: 'line',
+  data: {
+    labels: years,
+    datasets: [{ data: goldEurG, borderColor: '#b45309', backgroundColor: 'rgba(180,83,9,.08)',
+                 borderWidth: 2, fill: true, tension: 0.3, pointRadius: 1.5 }]
+  },
+  options: baseOpts('EUR/g')
+});
+
+new Chart(document.getElementById('goldUsdChart'), {
+  type: 'line',
+  data: {
+    labels: years,
+    datasets: [{ data: goldUsdG, borderColor: '#7c3aed', backgroundColor: 'rgba(124,58,237,.08)',
+                 borderWidth: 2, fill: true, tension: 0.3, pointRadius: 1.5 }]
+  },
+  options: baseOpts('USD/g')
+});
+
+new Chart(document.getElementById('ozChart'), {
+  type: 'line',
+  data: {
+    labels: years,
+    datasets: [{ data: sqmOzArr, borderColor: '#16a34a', backgroundColor: 'rgba(22,163,74,.08)',
+                 borderWidth: 2, fill: true, tension: 0.3, pointRadius: 1.5 }]
+  },
+  options: baseOpts('m²/oz')
+});
+
+new Chart(document.getElementById('g100Chart'), {
+  type: 'bar',
+  data: {
+    labels: years,
+    datasets: [{ data: sqm100, backgroundColor: gpmBg, borderRadius: 2 }]
+  },
+  options: {
+    ...baseOpts('m²/100g'),
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: i => `${i.parsed.y} m² / 100g zlata` } }
+    }
+  }
+});
+
+// ─── STAT PILLS ───────────────────────────────────────────────
+const last = DATA[DATA.length - 1];
+const peak08 = DATA.find(d => d.god === 2008);
+const min12  = DATA.find(d => d.god === 2012);
+const min80  = DATA.find(d => d.god === 1984);
+
+const statsEl = document.getElementById('statsRow');
+[
+  { val: `€${last.bgEur.toLocaleString()}`, lbl: 'BG m² (2026*)', color: '#1c64c8' },
+  { val: `$${Math.round(last.bgUsd).toLocaleString()}`, lbl: 'BG m² USD (2026*)', color: '#0e7490' },
+  { val: `${last.gpm.toFixed(0)}g`, lbl: 'g zlata / m² (2026)', color: '#d97706' },
+  { val: `${peak08.gpm.toFixed(0)}g`, lbl: 'Vrhunac g/m² (2008)', color: '#dc2626' },
+  { val: `${min12.gpm.toFixed(0)}g`, lbl: 'Minimum g/m² (2012)', color: '#16a34a' },
+  { val: `$${Math.round(last.goldUsdG * 31.1).toLocaleString()}`, lbl: 'Zlato USD/oz (2026*)', color: '#b45309' },
+].forEach(s => {
+  statsEl.innerHTML += `
+    <div class="stat">
+      <div class="stat-val" style="color:${s.color}">${s.val}</div>
+      <div class="stat-lbl">${s.lbl}</div>
+    </div>`;
+});
+
+// ─── ERA LABELS ───────────────────────────────────────────────
+[
+  'I: Bretton Woods (1970–79)',
+  'II: Reaganomika (1980–90)',
+  'III: Hiperinflacija (1991–99)',
+  'IV: RE Bum (2000–12)',
+  'V: Novi rast (2013–26)',
+].forEach(t => {
+  document.getElementById('eraLabels').innerHTML +=
+    `<span class="era-pill">${t}</span>`;
+});
+
+// ─── TABELA ───────────────────────────────────────────────────
+const ERA_HEADERS = {
+  1970: 'Era I — Bretton Woods do slobodnog tržišta',
+  1980: 'Era II — Reaganomika i stagflacija (Plaza Accord 1985)',
+  1991: 'Era III — Hiperinflacija i sankcije (!! = tržište gotovo zamrlo)',
+  2000: 'Era IV — Tranzicija i nekretninski bum',
+  2013: 'Era V — Novi rast oba sredstva (2013–2026)',
+};
+
+const tb = document.getElementById('tableBody');
+DATA.forEach(d => {
+  if (ERA_HEADERS[d.god]) {
+    tb.innerHTML += `<tr class="era-row"><td colspan="9">▸ ${ERA_HEADERS[d.god]}</td></tr>`;
+  }
+  const gc = d.gpm < 25 ? 'cheap' : d.gpm > 75 ? 'pricey' : d.note.includes('!') ? 'warn' : '';
+  const ns = d.note ? `<span class="est">${d.note}</span>` : '';
+  tb.innerHTML += `
+    <tr>
+      <td>${d.god}${ns}</td>
+      <td>$${d.gusd.toLocaleString()}</td>
+      <td>€${d.goldEurG.toFixed(2)}</td>
+      <td>$${d.goldUsdG.toFixed(2)}</td>
+      <td>€${d.bgEur.toLocaleString()}</td>
+      <td>$${Math.round(d.bgUsd).toLocaleString()}</td>
+      <td class="${gc}">${d.gpm.toFixed(1)}</td>
+      <td>${d.sqmOz.toFixed(2)}</td>
+      <td>${d.sqm100.toFixed(2)}</td>
+    </tr>`;
+});
+</script>
+</body>
+</html>
