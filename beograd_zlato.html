@@ -134,7 +134,45 @@ tr:hover td { background: #f8f9fa; }
 .est    { color: #adb5bd; font-size: 0.75em; }
 .rgz    { color: #16a34a; font-size: 0.72em; font-weight: 600; }
 
-/* NOTE */
+/* ANALIZA SEKCIJA */
+.analysis { margin-top: 20px; }
+.analysis-title {
+  font-size: clamp(1rem, 4vw, 1.25rem);
+  font-weight: 700; color: var(--text);
+  text-align: center; margin-bottom: 4px;
+}
+.analysis-sub {
+  text-align: center; font-size: clamp(0.68rem, 2vw, 0.78rem);
+  color: var(--muted); margin-bottom: 16px;
+}
+.analysis-block {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 12px; padding: clamp(12px, 3vw, 18px);
+  margin-bottom: 12px; box-shadow: var(--shadow);
+}
+.analysis-block h4 {
+  font-size: clamp(0.82rem, 2.8vw, 0.95rem);
+  font-weight: 700; margin-bottom: 8px; color: var(--text);
+}
+.analysis-block p {
+  font-size: clamp(0.72rem, 2.3vw, 0.82rem);
+  line-height: 1.75; color: var(--text);
+}
+.analysis-block p + p { margin-top: 7px; }
+.verdict-tag {
+  display: inline-block; font-size: 0.68rem; font-weight: 700;
+  padding: 2px 9px; border-radius: 20px; margin-bottom: 8px;
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.vt-green { background: #dcfce7; color: #15803d; }
+.vt-orange { background: #ffedd5; color: #c2410c; }
+.vt-red { background: #fee2e2; color: #b91c1c; }
+.vt-blue { background: #dbeafe; color: #1d4ed8; }
+.zone-list { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+.zone-item { background: #f8f9fa; border-radius: 8px; padding: 10px 12px; }
+.zone-name { font-weight: 700; font-size: clamp(0.78rem, 2.5vw, 0.88rem); }
+.zone-price { color: var(--blue); font-weight: 700; font-size: clamp(0.72rem, 2vw, 0.8rem); }
+.zone-note { color: var(--muted); font-size: clamp(0.65rem, 1.9vw, 0.72rem); margin-top: 2px; line-height: 1.4; }
 .note {
   text-align: center;
   font-size: clamp(0.65rem, 2vw, 0.75rem);
@@ -311,6 +349,83 @@ tr:hover td { background: #f8f9fa; }
   <b>Napomene o podacima:</b><br>
   Zlato: godišnji proseci LBMA (London Bullion Market) — pouzdani podaci. · Pre-2000 Belgrade cene: DEM-ekvivalent procene (tržište socijalistička Jugoslavija + hiperinflacija 1992–94 = ograničeno tržište).<br>
   <b>RGZ</b> = Republički geodetski zavod, Registar cena nepokretnosti — zvanične transakcijske cene (2019–2025), hedonic regression, baza Q1 2019=100. · ~ = procena. · * = procena 2026. · USD konverzija: pre-1999 kroz DEM kurs, 1999+ direktno EUR/USD.
+</div>
+
+<!-- ANALIZA I PREDIKCIJE -->
+<div class="analysis">
+  <div class="analysis-title">Analiza i predikcije — Beograd i Pančevo</div>
+  <div class="analysis-sub">Lična procena · April 2026 · Nije finansijski savet</div>
+
+  <div class="analysis-block">
+    <span class="verdict-tag vt-orange">Rizik sloma tržišta</span>
+    <h4>Može li doći do sloma cena?</h4>
+    <p>Klasičan slom tržišta nekretnina nastaje kada kreditni mehur pukne i nastane masovna prinudna prodaja. U Beogradu taj scenarijo je malo verovatan — tek <b>31,8% kupovina ide na kredit</b> (vs 70%+ u zapadnoj Evropi). Znatan deo tržišta su keš kupci: dijaspora iz Nemačke, Švajcarske, Austrije, IT sektor, preduzetnici. Nema pritiska prinudne prodaje.</p>
+    <p><b>Korekcija od 10–20%</b> je realna mogućnost u skupim segmentima ako globalne kamate ostanu visoke ili se ekonomija uspori. Ali to nije slom — to je hlađenje. Potpuni slom (30%+) bi zahtevao bankarski krah i masovnu nezaposlenost, što nije u kartama bez velikog eksternog šoka. <b>Dugoročno držanje (5+ godina) drastično smanjuje tržišni rizik.</b></p>
+  </div>
+
+  <div class="analysis-block">
+    <span class="verdict-tag vt-green">Leverage strategija</span>
+    <h4>Kredit kao poluga: €25.000 sopstvenih, stan od €130.000</h4>
+    <p>Matematika je sledeca: uložiš €25k, uzmeš kredit od €105k (~5% kamata, 25 god = ~€615/mes rata). Kirija za stan od 50m² u Beogradu (srednji pojas): €500–650/mes. Cash flow je negativan za <b>~€0–100/mes</b> — podnošljivo iz plate.</p>
+    <p>Ako cena raste 7% godišnje (istorijski prosek 2013–2025): za 5 godina stan vredi ~€182k, hipoteka ~€93k, equity ~€89k — od uloženih €25k. To je <b>3,5× povraćaj</b> za 5 godina ili ~28% godišnje na uloženi kapital zahvaljujući poluzi. I to bez računanja kirije koja je otplačivala deo kredita. Strategija radi ako dve stvari drže: <b>kirija pokriva većinu rate</b> i <b>možeš servisirani kredit iz redovnih prihoda</b>. Ne razvlači se.</p>
+    <p><b>Pre-sale strategija</b> (kupovina u izgradnji, prodaja na ključ): tipično +15–25% za 2–3 godine bez zakupca, bez čekanja. Realn plan B za brži obrt. Jedini rizik: developer mora biti poznat i sa referencama — Srbija je imala problematične projekte.</p>
+  </div>
+
+  <div class="analysis-block">
+    <span class="verdict-tag vt-blue">Zone rasta · Beograd</span>
+    <h4>Koje zone i cene gledati u Beogradu?</h4>
+    <p>Centar (Vračar, Stari grad) je skupo za ulaz i nema dramatičnog rasta pred sobom — ali je sigurno i lako se iznajmljuje. Za rast kapitala + kiriju, gledaj ove zone:</p>
+    <ul class="zone-list">
+      <li class="zone-item">
+        <div class="zone-name">Zemun — stari deo i obala</div>
+        <div class="zone-price">€2.000–2.600/m²</div>
+        <div class="zone-note">Podcenjen u odnosu na blizinu centra, rekonstrukcija keја, raste interes mladih. Dobro za dugoročno držanje.</div>
+      </li>
+      <li class="zone-item">
+        <div class="zone-name">Bežanijska kosa / Ledine</div>
+        <div class="zone-price">€1.700–2.200/m²</div>
+        <div class="zone-note">Novogradnja, dobra saobraćajna veza prema centru i aerodromu. IT zakupci sa Novog Beograda. Dobar ulaz za kredit strategiju.</div>
+      </li>
+      <li class="zone-item">
+        <div class="zone-name">Karaburma / Višnjička banja (Palilula)</div>
+        <div class="zone-price">€1.500–2.000/m²</div>
+        <div class="zone-note">Najniži ulaz u centarskim opštinama. Blizina Pančevačkog mosta i novih putnih veza. Viši potencijal rasta, ali i više čekanja.</div>
+      </li>
+      <li class="zone-item">
+        <div class="zone-name">Novi Beograd — blokovi uz Savu (65–67)</div>
+        <div class="zone-price">€2.800–3.400/m²</div>
+        <div class="zone-note">Poslovni centar, visoka kirija od korporativnih zakupaca i expata. Skuplji ulaz ali najlikvidnije tržište u gradu.</div>
+      </li>
+      <li class="zone-item">
+        <div class="zone-name">Rakovica / Banovo brdo</div>
+        <div class="zone-price">€1.800–2.300/m²</div>
+        <div class="zone-note">Dobri školski rajonu, porodični zakupci, stabilna tražnja. Manje seksi od centra ali manje i rizično.</div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="analysis-block">
+    <span class="verdict-tag vt-orange">Pančevo — analiza</span>
+    <h4>Pančevo: jeftinije, ali da li se isplati?</h4>
+    <p>Ulazna cena €900–1.300/m² je privlačna — otprilike 2× jeftinije od Beograda. Most koji spaja Pančevo sa Palilulom svodi putovanje do centra Beograda na 20–25 minuta. Cene su rasle solidno od 2020. i ima prostora za dalji rast ako beogradski "spillover" nastavi.</p>
+    <p><b>Ali postoji ozbiljan problem sa izdavanjem.</b> Pančevo nema razvijenu IT scenu, nema internacionalne kompanije, nema studentsku populaciju koja traži stan. Zakupci su lokalni radnici s nižim primanjima. Kirija za stan od 50m² realnih €250–320/mes, dok bi rata kredita bila €400–500/mes — <b>negativan cash flow od €150–200/mes</b> koji moraš da pokriš iz džepa. To menja računicu.</p>
+    <p><b>Pančevo ima smisla kao čista kapital igra</b> — kupiš jeftino, čekaš da cene beogradskog prstena gurnu rast, prodaš za 5–7 godina. Nema smisla ako ti je cilj kirija i pasivni prihod. Još jedan faktor koji se ne sme ignorisati: <b>vazduh u Pančevu</b>. Petrohemijski kompleks NIS-a je realan problem koji utiče na kvalitet života i dugoročnu atraktivnost za zakupce koji biraju.</p>
+  </div>
+
+  <div class="analysis-block">
+    <span class="verdict-tag vt-green">Hoće li biti zakupaca?</span>
+    <h4>Tražnja za iznajmljivanjem u Beogradu</h4>
+    <p>Za Beograd — <b>da, tražnja je jaka i strukturna.</b> Beograd ima 50.000+ IT radnika prosečnih primanja €2.000–3.000/mes koji vole da iznajmljuju. Dolazi diaspora koja se vraća na kraće ili duže periode. Raste broj stranaca koji rade u međunarodnim organizacijama, kompanijama koje otvaraju regionalne centre. Turistički Airbnb tržište u centru daje 8–12% bruto prinos. Studenti iz cele Srbije. Tražnja nije spekulativna — ona je demografska i ekonomska.</p>
+    <p>Jedini rizik: <b>previše novogradnje u istoj mikrolokaciji odjednom</b> može privremeno pritisnuti kirije. Zato je bitno birati lokacije gde je ponuda ograničena, a ne masovne blokove novih zgrada na periferiji.</p>
+  </div>
+
+  <div class="analysis-block" style="border-color:#1c64c8; background:#f0f7ff;">
+    <span class="verdict-tag vt-blue">Moja procena</span>
+    <h4>Da li je sad dobar trenutak?</h4>
+    <p>Zlato kaže da — u zlatnim gramima, beogradski kvadrat je <b>najjeftiniji u poslednjih 40 godina</b> (~20g/m²). To ne garantuje rast, ali govori da nisi na istorijskom vrhuncu precenjenosti.</p>
+    <p>U evrima, cene su više nego ikad i affordabilnost je napeta. Prosečna plata pokriva manji deo kvadrature nego pre 10 godina. To ograničava rast u skupim segmentima. Ali <b>ulaz uz kredit u zoni €1.600–2.200/m²</b>, sa solidnim zakupcem i 5+ godina horizonta, ima ekonomski smisao u inflatorno okruženje gde je euro polako gubi vrednost a fizička imovina drži.</p>
+    <p><b>Beograd nad Pančevom</b> za kiriju — bez dileme. Pančevo samo za kapital igru sa dugim horizontom i tolerancijom na ilokvidnost. Nikako ne ulaziti u Pančevo ako kirija treba da pokriva kredit — neće.</p>
+  </div>
 </div>
 
 <script>
